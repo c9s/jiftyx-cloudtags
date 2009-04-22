@@ -11,6 +11,8 @@ requires 'Mouse'                => 0;
 
 build_requires 'Test::More';
 
+tests 't/*.t t/*/t/*.t';
+
 auto_install;
 
 WriteAll;
