@@ -128,7 +128,6 @@ if you don't export anything, such as for a purely object-oriented module.
 
 =head1 FUNCTIONS
 
-
 =head1 AUTHOR
 
 Cornelius, C<< <cornelius.howl at gmail.com> >>
