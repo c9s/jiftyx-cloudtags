@@ -52,7 +52,5 @@ my $collection = M('LabelsCollection');
 ok( $collection );
 my $tgen = new JiftyX::CloudTags;
 ok( $tgen );
-$tgen->init( $collection );
-
-
-
+$tgen->set_tags( $collection );
+warn $tgen->render;

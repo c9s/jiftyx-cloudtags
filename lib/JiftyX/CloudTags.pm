@@ -4,19 +4,36 @@ use warnings;
 use strict;
 use Mouse;
 
+
 our $VERSION = '0.01';
 
-has 'collection' => (is => 'rw', isa => 'Object');
+has 'collection'          => ( is => 'rw', isa => 'Object' );
+has 'default_link_format' => ( 
+    is => 'rw', 
+    isa => 'Str' , 
+    default => '${id} ${text}'
+);
 
-sub init {
+sub set_tags {
     my $self       = shift;
     my $collection = shift;
+    my %args       = @_;
     $self->collection( $collection );
+
+    # $args{text_by} 
+    # text_by => 'name',
+    # size_by => 'related_posts',
+    # link_format => '',
+
+    my $link_format = $args{link_format} || $self->default_link_format;
+
+
 }
 
 
 sub render {
     my $self = shift;
+    # $self->collection;
 }
 
 1; 
