@@ -16,7 +16,7 @@ has 'args'                => (
 has 'default_link_format' => ( 
     is => 'rw', 
     isa => 'Str' , 
-    default => '${id} ${text}'
+    default => '?id=%i&text=%t&custom=%{hit}'
 );
 
 sub set_tags {
@@ -76,20 +76,40 @@ sub render {
 
     my $degree = $fontsize_degree / ( $max_boundary - $min_boundary )  ;
 
+    my $offset = 0;
+    my $div_width = 200;
+
     my $output = '';
     while( my $c = $collection->next ) {
         my $text_acc = $args{text_by};
         my $size_acc = $args{size_by};
 
         # XXX: count tag width by text , break line if the width exceeds
+        my $id = $c->id;
         my $text = $c->$text_acc;
         my $size = ( ref $c->$size_acc ? $c->$size_acc->count : $c->size_acc );
         my $fontsize = int( $size * $degree + $min_fontsize );
+
+        my $url = $link_format;
+        $url =~ s/%i/$id/g;
+        $url =~ s/%t/$text/g;
+
+        # custom column
+        $url =~ s/\%\{(\w+)\}/ $c->$1 /eg;
+
+
+        # my $url = 
         $output .= qq|
             <span class="cloudtags" style="font-size: ${fontsize}px;">
-                <a href="">$text</a>
+                <a href="$url">$text</a>
             </span>
         |;
+
+        $offset += length($text) * $fontsize;
+        if( $offset > $div_width ) {
+            $output .= q|<br/>|; 
+            $offset = 0;
+        }
     }
 
     $output;
