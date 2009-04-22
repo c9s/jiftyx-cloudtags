@@ -38,16 +38,16 @@ sub set_tags {
     $self->args( \%args );
 }
 
-sub find_boundary {
+sub find_quantity {
     my $collection = shift;
     my $size_by    = shift;
-    my ( $min_boundary, $max_boundary ) = ( 0, 0 );
+    my ( $min_quantity, $max_quantity ) = ( 0, 0 );
     while( my $c = $collection->next ) {
         my $size = ( ref $c->$size_by ? $c->$size_by->count : $c->$size_by );
-        $min_boundary = $size if( $size < $min_boundary );
-        $max_boundary = $size if( $size > $max_boundary );
+        $min_quantity = $size if( $size < $min_quantity );
+        $max_quantity = $size if( $size > $max_quantity );
     };
-    return ( $min_boundary, $max_boundary );
+    return ( $min_quantity, $max_quantity );
 }
 
 
@@ -67,17 +67,17 @@ sub render {
     my $fontsize_degree = $args{fontsize_degree}
                     || ( $max_fontsize - $min_fontsize );
 
-    my ( $min_boundary , $max_boundary );
-    $min_boundary ||= $args{min_boundary};
-    $max_boundary ||= $args{max_boundary};
-    unless( $min_boundary || $max_boundary ) {
-        ( $min_boundary , $max_boundary ) = find_boundary( $collection , $args{size_by} );
+    my ( $min_quantity , $max_quantity );
+    $min_quantity ||= $args{min_quantity};
+    $max_quantity ||= $args{max_quantity};
+    unless( $min_quantity || $max_quantity ) {
+        ( $min_quantity , $max_quantity ) = find_quantity( $collection , $args{size_by} );
     }
 
-    my $degree = $fontsize_degree / ( $max_boundary - $min_boundary )  ;
+    my $degree = $fontsize_degree / ( $max_quantity - $min_quantity )  ;
 
     my $offset = 0;
-    my $div_width = 200;
+    my $div_width = $args{break_width} || -1;
 
     my $output = '';
     while( my $c = $collection->next ) {
@@ -103,8 +103,8 @@ sub render {
         |;
 
         $offset += length($text) * $fontsize;
-        if( $offset > $div_width ) {
-            $output .= q|<br/>|; 
+        if ( $div_width != -1 and $offset > $div_width ) {
+            $output .= q|<br/>|;
             $offset = 0;
         }
     }
@@ -128,15 +128,34 @@ Version 0.01
 
     use JiftyX::CloudTags;
 
-    my $labels = MyApp::LabelCollection->new( );
-    $labels->unlimit;
-    
-    my $cloudtag = JiftyX::CloudTags->new(  $labels  ,
+    my $cloudtag = JiftyX::CloudTags->new( 'LabelCollection'  ,
         text_by => 'name',
         size_by => 'related_posts',
-        link_format => '',
+        link_format => '?id=%i',
     );
     $cloudtag->render;
+
+in more detail:
+
+    my $cloudtag = JiftyX::CloudTags->new( 'LabelCollection'  ,
+        text_by => 'name',
+        size_by => 'related_posts',
+
+        link_format => '?id=%i&text=%t&%{custom_column}',
+
+        min_fontsize => 9,
+        max_fontsize => 72,
+        fontsize_degree => 6,
+
+        min_quantity => 0,
+        max_quantity => 100,
+
+        break_width => 200,   # in pixel
+
+    );
+    $cloudtag->render;
+
+
 
 =head1 EXPORT
 
@@ -145,12 +164,44 @@ if you don't export anything, such as for a purely object-oriented module.
 
 =head1 FUNCTIONS
 
-=head2 set_tags
+=head2 set_tags COLLECTION or COLLECTION_NAME , ARGS
 
-=head2 find_boundary
+=for 4
+
+=item COLLECTION or COLLECTION_NAME
+
+=item ARGS
+
+Hash Arguments:
+
+=back
+
+=head2 find_quantity COLLECTION , SIZE_BY
+
+find_quantity method returns (min,max) list. by searching the max,min value in
+collection object.
+
+=for 4
+
+=item COLLECCTION
+
+COLLECTION is a L<Jifty::DBI::Collection> Object. it will be something like
+L<MyApp::Model::LabelCollection> object in your application.
+
+=item SIZE_BY
+
+the column name of your model.
+
+=back 
 
 =head2 render 
 
+return the rendered html of cloudtags.
+
+=for 4
+
+
+=back
 
 =head1 AUTHOR
 

@@ -56,6 +56,7 @@ ok( $tgen );
 $tgen->set_tags( 'LabelsCollection' , 
     text_by => 'name',
     size_by => 'posts',
+    break_width => 200,
 );
 my $html = $tgen->render;
 like( $html , qr{\Q<span class="cloudtags" style="font-size: 48px;">} , 'html ok' );
