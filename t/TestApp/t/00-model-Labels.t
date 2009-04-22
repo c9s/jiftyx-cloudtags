@@ -46,4 +46,13 @@ $o->create(
 );
 $rel->create( ref_label => $o ) for ( 1 .. 10 );
 
+use_ok( 'JiftyX::CloudTags' );
+
+my $collection = M('LabelsCollection');
+ok( $collection );
+my $tgen = new JiftyX::CloudTags;
+ok( $tgen );
+$tgen->init( $collection );
+
+
 
