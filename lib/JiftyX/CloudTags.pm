@@ -64,8 +64,7 @@ sub render {
 
     my $min_fontsize = $args{min_fontsize} || 9;
     my $max_fontsize = $args{max_fontsize} || 48;
-    my $fontsize_degree = $args{fontsize_degree}
-                    || ( $max_fontsize - $min_fontsize );
+    my $fontsize_degree = $max_fontsize - $min_fontsize ;
 
     my ( $min_quantity , $max_quantity );
     $min_quantity ||= $args{min_quantity};
@@ -74,7 +73,8 @@ sub render {
         ( $min_quantity , $max_quantity ) = find_quantity( $collection , $args{size_by} );
     }
 
-    my $degree = $fontsize_degree / ( $max_quantity - $min_quantity )  ;
+    my $degree = $args{degree}
+        || ( $fontsize_degree / ( $max_quantity - $min_quantity ) );
 
     my $offset = 0;
     my $div_width = $args{break_width} || -1;
@@ -145,7 +145,7 @@ in more detail:
 
         min_fontsize => 9,
         max_fontsize => 72,
-        fontsize_degree => 6,
+        degree => 6,
 
         min_quantity => 0,
         max_quantity => 100,
@@ -166,27 +166,51 @@ if you don't export anything, such as for a purely object-oriented module.
 
 =head2 set_tags COLLECTION or COLLECTION_NAME , ARGS
 
-=for 4
+=over 4
+
 =item COLLECTION or COLLECTION_NAME
 
 =item ARGS
 
 Arguments:
 
-=for 8
+=over 8
+
 =item size_by
+
 =item text_by
+
 =item link_format
+
 =back
 
 Optional Arguments:
 
-=for 8
+=over 8
+
 =item min_quantity
+
 =item max_quantity
+
+if you've know the quantity boundary , then we dont need to find the boundary
+by iterating collection items
+
 =item min_fontsize
+
+the minimal font size
+
 =item max_fontsize
+
+the maximal fontsize
+
+=item degree
+
+font size degree , the quantiy of the model will be multiply by the font size degree
+
 =item break_width
+
+break line if the tag text width overflows
+
 =back
     
 
@@ -197,7 +221,7 @@ Optional Arguments:
 find_quantity method returns (min,max) list. by searching the max,min value in
 collection object.
 
-=for 4
+=over 4
 
 =item COLLECCTION
 
@@ -213,11 +237,6 @@ the column name of your model.
 =head2 render 
 
 return the rendered html of cloudtags.
-
-=for 4
-
-
-=back
 
 =head1 AUTHOR
 
