@@ -6,11 +6,11 @@ use Jifty::DBI::Schema;
 
 use TestApp::Record schema {
 
-column label =>
-    refers_to TestApp::Model::Label;
+column ref_label =>
+    refers_to TestApp::Model::Labels;
 
-column post =>
-    refers_to TestApp::Model::Post;
+column ref_post =>
+    refers_to TestApp::Model::Posts;
 
 };
 

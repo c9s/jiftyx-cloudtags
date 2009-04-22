@@ -17,6 +17,9 @@ use_ok('TestApp::Model::Labels');
 my $system_user = TestApp::CurrentUser->superuser;
 ok($system_user, "Found a system user");
 
+
+use JiftyX::ModelHelpers;
+
 # Try testing a create
 my $o = TestApp::Model::Labels->new(current_user => $system_user);
 my ($id) = $o->create();
@@ -24,11 +27,23 @@ ok($id, "Labels create returned success");
 ok($o->id, "New Labels has valid id set");
 is($o->id, $id, "Create returned the right id");
 
+
+use JiftyX::ModelHelpers;
+
+my $rel = M('LabelPost');
+
 # And another
 $o->create( 
-        name => 'A1',
+        name => 'Perl',
         hit => 20,
 );
-$o->create(  );
+$rel->create( ref_label => $o ) for ( 1 .. 20 );
+
+
+$o->create( 
+        name => 'Jifty',
+        hit => 10,
+);
+$rel->create( ref_label => $o ) for ( 1 .. 10 );
 
 
