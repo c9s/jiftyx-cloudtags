@@ -3,7 +3,7 @@ package JiftyX::CloudTags;
 use warnings;
 use strict;
 use Mouse;
-
+use JiftyX::ModelHelpers;
 
 our $VERSION = '0.01';
 
@@ -16,18 +16,36 @@ has 'default_link_format' => (
 
 sub set_tags {
     my $self       = shift;
-    my $collection = shift;
+    my $collection_class = shift;
     my %args       = @_;
+
+    my $collection;
+    if( ref $collection_class ) {
+        $collection = $collection_class;
+    }
+    else {
+        $collection = M($collection_class);
+        $collection->unlimit;
+    }
     $self->collection( $collection );
+
+    $collection->order_by( column => $args{text_by}, order => 'desc' );
+
+    my $link_format = $args{link_format} || $self->default_link_format;
 
     # $args{text_by} 
     # text_by => 'name',
     # size_by => 'related_posts',
     # link_format => '',
 
-    my $link_format = $args{link_format} || $self->default_link_format;
+    my $min_size = 9;
+    my $max_size = 48;
 
-
+    my $output = '';
+    while( my $c = $collection->next ) {
+        my $acc = $args{text_by};
+        warn $c->$acc;
+    }
 }
 
 

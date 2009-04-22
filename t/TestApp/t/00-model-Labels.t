@@ -22,7 +22,10 @@ use JiftyX::ModelHelpers;
 
 # Try testing a create
 my $o = TestApp::Model::Labels->new(current_user => $system_user);
-my ($id) = $o->create();
+my ($id) = $o->create(
+    name => 'C++',
+    hit => 3,
+);
 ok($id, "Labels create returned success");
 ok($o->id, "New Labels has valid id set");
 is($o->id, $id, "Create returned the right id");
@@ -48,9 +51,9 @@ $rel->create( ref_label => $o ) for ( 1 .. 10 );
 
 use_ok( 'JiftyX::CloudTags' );
 
-my $collection = M('LabelsCollection');
-ok( $collection );
 my $tgen = new JiftyX::CloudTags;
 ok( $tgen );
-$tgen->set_tags( $collection );
+$tgen->set_tags( 'LabelsCollection' , 
+    text_by => 'name',
+);
 warn $tgen->render;
