@@ -64,7 +64,8 @@ sub render {
 
     my $min_fontsize = $args{min_fontsize} || 9;
     my $max_fontsize = $args{max_fontsize} || 48;
-    my $fontsize_levels = $max_fontsize - $min_fontsize ;
+    my $fontsize_degree = $args{fontsize_degree}
+                    || ( $max_fontsize - $min_fontsize );
 
     my ( $min_boundary , $max_boundary );
     $min_boundary ||= $args{min_boundary};
@@ -73,21 +74,22 @@ sub render {
         ( $min_boundary , $max_boundary ) = find_boundary( $collection , $args{size_by} );
     }
 
-    my $degree = $fontsize_levels / ( $max_boundary - $min_boundary )  ;
+    my $degree = $fontsize_degree / ( $max_boundary - $min_boundary )  ;
 
     my $output = '';
     while( my $c = $collection->next ) {
         my $text_acc = $args{text_by};
         my $size_acc = $args{size_by};
-        warn $c->$text_acc;
 
+        # XXX: count tag width by text , break line if the width exceeds
         my $text = $c->$text_acc;
         my $size = ( ref $c->$size_acc ? $c->$size_acc->count : $c->size_acc );
-
+        my $fontsize = int( $size * $degree + $min_fontsize );
         $output .= qq|
-            $text : @{[ $size * $degree + $min_fontsize  ]}
+            <span class="cloudtags" style="font-size: ${fontsize}px;">
+                <a href="">$text</a>
+            </span>
         |;
-
     }
 
     $output;
