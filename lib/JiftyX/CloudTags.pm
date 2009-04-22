@@ -57,11 +57,6 @@ sub render {
     my %args = %{ $self->args };
     my $link_format = $args{link_format} || $self->default_link_format;
 
-    # $args{text_by} 
-    # text_by => 'name',
-    # size_by => 'related_posts',
-    # link_format => '',
-
     my $min_fontsize = $args{min_fontsize} || 9;
     my $max_fontsize = $args{max_fontsize} || 48;
     my $fontsize_degree = $max_fontsize - $min_fontsize ;
@@ -178,9 +173,16 @@ Arguments:
 
 =item size_by
 
+column name
+
 =item text_by
 
+column name
+
 =item link_format
+
+In string.  C<%i> is for id , C<%t> is for text. C<%{custom_column}> for custom
+column name of your model object.
 
 =back
 
