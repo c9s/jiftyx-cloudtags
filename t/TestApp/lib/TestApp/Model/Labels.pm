@@ -13,7 +13,7 @@ column hit =>
     type is 'integer';
 
 column posts =>
-    refers_to TestApp::Model::PostsCollection;
+    refers_to TestApp::Model::LabelPostCollection;
 
 };
 

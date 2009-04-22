@@ -25,25 +25,10 @@ ok($o->id, "New Labels has valid id set");
 is($o->id, $id, "Create returned the right id");
 
 # And another
-$o->create();
-ok($o->id, "Labels create returned another value");
-isnt($o->id, $id, "And it is different from the previous one");
+$o->create( 
+        name => 'A1',
+        hit => 20,
+);
+$o->create(  );
 
-# Searches in general
-my $collection =  TestApp::Model::LabelsCollection->new(current_user => $system_user);
-$collection->unlimit;
-is($collection->count, 2, "Finds two records");
-
-# Searches in specific
-$collection->limit(column => 'id', value => $o->id);
-is($collection->count, 1, "Finds one record with specific id");
-
-# Delete one of them
-$o->delete;
-$collection->redo_search;
-is($collection->count, 0, "Deleted row is gone");
-
-# And the other one is still there
-$collection->unlimit;
-is($collection->count, 1, "Still one left");
 

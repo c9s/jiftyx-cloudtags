@@ -11,10 +11,7 @@ has 'collection' => (is => 'rw', isa => 'Object');
 sub init {
     my $self       = shift;
     my $collection = shift;
-    use Data::Dumper::Simple;
-    warn Dumper( $self );
-
-
+    $self->collection( $collection );
 }
 
 1; 
@@ -100,6 +97,5 @@ L<http://search.cpan.org/dist/JiftyX-CloudTags/>
 Copyright 2009 Cornelius, all rights reserved.
 
 This program is released under the following license: GPL
-
 
 =cut
