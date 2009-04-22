@@ -81,10 +81,8 @@ sub render {
 
     my $output = '';
     while( my $c = $collection->next ) {
-        my $text_acc = $args{text_by};
-        my $size_acc = $args{size_by};
+        my ( $text_acc, $size_acc ) = ( $args{text_by}, $args{size_by} );
 
-        # XXX: count tag width by text , break line if the width exceeds
         my $id = $c->id;
         my $text = $c->$text_acc;
         my $size = ( ref $c->$size_acc ? $c->$size_acc->count : $c->size_acc );
@@ -146,6 +144,13 @@ A list of functions that can be exported.  You can delete this section
 if you don't export anything, such as for a purely object-oriented module.
 
 =head1 FUNCTIONS
+
+=head2 set_tags
+
+=head2 find_boundary
+
+=head2 render 
+
 
 =head1 AUTHOR
 
