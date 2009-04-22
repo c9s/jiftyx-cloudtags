@@ -167,12 +167,28 @@ if you don't export anything, such as for a purely object-oriented module.
 =head2 set_tags COLLECTION or COLLECTION_NAME , ARGS
 
 =for 4
-
 =item COLLECTION or COLLECTION_NAME
 
 =item ARGS
 
-Hash Arguments:
+Arguments:
+
+=for 8
+=item size_by
+=item text_by
+=item link_format
+=back
+
+Optional Arguments:
+
+=for 8
+=item min_quantity
+=item max_quantity
+=item min_fontsize
+=item max_fontsize
+=item break_width
+=back
+    
 
 =back
 
