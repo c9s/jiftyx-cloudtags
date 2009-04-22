@@ -4,7 +4,6 @@ Makefile.PL
 MANIFEST
 META.yml
 README
-t/00-load.t
 t/TestApp/bin/jifty
 t/TestApp/etc/config.yml
 t/TestApp/lib/TestApp/Model/LabelPost.pm
