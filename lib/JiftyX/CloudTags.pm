@@ -2,6 +2,22 @@ package JiftyX::CloudTags;
 
 use warnings;
 use strict;
+use Mouse;
+
+our $VERSION = '0.01';
+
+has 'collection' => (is => 'rw', isa => 'Object');
+
+sub new {
+    my $class      = shift;
+    my $collection = shift;
+
+
+}
+
+1; 
+
+__END__
 
 =head1 NAME
 
@@ -11,11 +27,6 @@ JiftyX::CloudTags
 
 Version 0.01
 
-=cut
-
-our $VERSION = '0.01';
-
-
 =head1 SYNOPSIS
 
     use JiftyX::CloudTags;
@@ -23,8 +34,12 @@ our $VERSION = '0.01';
     my $labels = MyApp::LabelCollection->new( );
     $labels->unlimit;
     
-    my $foo = JiftyX::CloudTags->new(    );
-    ...
+    my $cloudtag = JiftyX::CloudTags->new(  $labels  ,
+        text_by => 'name',
+        size_by => 'related_posts',
+        link_format => '',
+    );
+    $cloudtag->render;
 
 =head1 EXPORT
 
@@ -33,19 +48,6 @@ if you don't export anything, such as for a purely object-oriented module.
 
 =head1 FUNCTIONS
 
-=head2 function1
-
-=cut
-
-sub function1 {
-}
-
-=head2 function2
-
-=cut
-
-sub function2 {
-}
 
 =head1 AUTHOR
 
@@ -56,8 +58,6 @@ Cornelius, C<< <cornelius.howl at gmail.com> >>
 Please report any bugs or feature requests to C<bug-jiftyx-cloudtags at rt.cpan.org>, or through
 the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=JiftyX-CloudTags>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
-
-
 
 
 =head1 SUPPORT
@@ -101,5 +101,3 @@ This program is released under the following license: GPL
 
 
 =cut
-
-1; # End of JiftyX::CloudTags
