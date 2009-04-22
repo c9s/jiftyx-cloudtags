@@ -14,6 +14,11 @@ sub init {
     $self->collection( $collection );
 }
 
+
+sub render {
+    my $self = shift;
+}
+
 1; 
 
 __END__
