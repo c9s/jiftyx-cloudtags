@@ -8,6 +8,11 @@ use JiftyX::ModelHelpers;
 our $VERSION = '0.01';
 
 has 'collection'          => ( is => 'rw', isa => 'Object' );
+has 'args'                => (
+    is => 'rw',
+    isa => 'HashRef'
+);
+
 has 'default_link_format' => ( 
     is => 'rw', 
     isa => 'Str' , 
@@ -15,9 +20,10 @@ has 'default_link_format' => (
 );
 
 sub set_tags {
-    my $self       = shift;
+    my $self             = shift;
     my $collection_class = shift;
-    my %args       = @_;
+    my %args             = @_;
+
 
     my $collection;
     if( ref $collection_class ) {
@@ -27,10 +33,28 @@ sub set_tags {
         $collection = M($collection_class);
         $collection->unlimit;
     }
-    $self->collection( $collection );
-
     $collection->order_by( column => $args{text_by}, order => 'desc' );
+    $self->collection( $collection );
+    $self->args( \%args );
+}
 
+sub find_boundary {
+    my $collection = shift;
+    my $size_by    = shift;
+    my ( $min_boundary, $max_boundary ) = ( 0, 0 );
+    while( my $c = $collection->next ) {
+        my $size = ( ref $c->$size_by ? $c->$size_by->count : $c->$size_by );
+        $min_boundary = $size if( $size < $min_boundary );
+        $max_boundary = $size if( $size > $max_boundary );
+    };
+    return ( $min_boundary, $max_boundary );
+}
+
+
+sub render {
+    my $self = shift;
+    my $collection = $self->collection;
+    my %args = %{ $self->args };
     my $link_format = $args{link_format} || $self->default_link_format;
 
     # $args{text_by} 
@@ -38,20 +62,39 @@ sub set_tags {
     # size_by => 'related_posts',
     # link_format => '',
 
-    my $min_size = 9;
-    my $max_size = 48;
+    my $min_fontsize = $args{min_fontsize} || 9;
+    my $max_fontsize = $args{max_fontsize} || 48;
+    my $fontsize_levels = $max_fontsize - $min_fontsize ;
+
+    my ( $min_boundary , $max_boundary );
+    $min_boundary ||= $args{min_boundary};
+    $max_boundary ||= $args{max_boundary};
+    unless( $min_boundary || $max_boundary ) {
+        ( $min_boundary , $max_boundary ) = find_boundary( $collection , $args{size_by} );
+    }
+
+    my $degree = $fontsize_levels / ( $max_boundary - $min_boundary )  ;
+    warn $max_boundary;
+    warn $min_boundary;
+    warn $fontsize_levels;
+    warn $degree;
 
     my $output = '';
     while( my $c = $collection->next ) {
-        my $acc = $args{text_by};
-        warn $c->$acc;
+        my $text_acc = $args{text_by};
+        my $size_acc = $args{size_by};
+        warn $c->$text_acc;
+
+        my $text = $c->$text_acc;
+        my $size = ( ref $c->$size_acc ? $c->$size_acc->count : $c->size_acc );
+
+        $output .= qq|
+            $text : @{[ $size * $degree + $min_fontsize  ]}
+        |;
+
     }
-}
 
-
-sub render {
-    my $self = shift;
-    # $self->collection;
+    warn $output;
 }
 
 1; 

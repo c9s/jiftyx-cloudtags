@@ -55,5 +55,6 @@ my $tgen = new JiftyX::CloudTags;
 ok( $tgen );
 $tgen->set_tags( 'LabelsCollection' , 
     text_by => 'name',
+    size_by => 'posts',
 );
 warn $tgen->render;
