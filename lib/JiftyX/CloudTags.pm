@@ -74,10 +74,6 @@ sub render {
     }
 
     my $degree = $fontsize_levels / ( $max_boundary - $min_boundary )  ;
-    warn $max_boundary;
-    warn $min_boundary;
-    warn $fontsize_levels;
-    warn $degree;
 
     my $output = '';
     while( my $c = $collection->next ) {
@@ -94,7 +90,7 @@ sub render {
 
     }
 
-    warn $output;
+    $output;
 }
 
 1; 
