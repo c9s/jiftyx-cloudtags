@@ -38,7 +38,7 @@ sub set_tags {
     $self->args( \%args );
 }
 
-sub find_quantity {
+sub find_boundary {
     my $collection = shift;
     my $size_by    = shift;
     my ( $min_quantity, $max_quantity ) = ( 0, 0 );
@@ -65,7 +65,7 @@ sub render {
     $min_quantity ||= $args{min_quantity};
     $max_quantity ||= $args{max_quantity};
     unless( $min_quantity || $max_quantity ) {
-        ( $min_quantity , $max_quantity ) = find_quantity( $collection , $args{size_by} );
+        ( $min_quantity , $max_quantity ) = find_boundary( $collection , $args{size_by} );
     }
 
     my $degree = $args{degree}
@@ -218,9 +218,9 @@ break line if the tag text width overflows
 
 =back
 
-=head2 find_quantity COLLECTION , SIZE_BY
+=head2 find_boundary COLLECTION , SIZE_BY
 
-find_quantity method returns (min,max) list. by searching the max,min value in
+find_boundary method returns (min,max) list. by searching the max,min value in
 collection object.
 
 =over 4
