@@ -9,7 +9,5 @@ BEGIN {
 
 diag( "Testing JiftyX::CloudTags $JiftyX::CloudTags::VERSION, Perl $], $^X" );
 
-
-use JiftyX::CloudTags;
-my $cloudtags = new JiftyX::CloudTags;
+my $cloudtags = JiftyX::CloudTags->new;
 ok( $cloudtags );
