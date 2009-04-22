@@ -8,9 +8,11 @@ our $VERSION = '0.01';
 
 has 'collection' => (is => 'rw', isa => 'Object');
 
-sub new {
-    my $class      = shift;
+sub init {
+    my $self       = shift;
     my $collection = shift;
+    use Data::Dumper::Simple;
+    warn Dumper( $self );
 
 
 }

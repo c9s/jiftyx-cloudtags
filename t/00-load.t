@@ -1,4 +1,5 @@
-#!perl -T
+#!perl
+use lib 'lib';
 
 use Test::More tests => 1;
 
@@ -7,3 +8,8 @@ BEGIN {
 }
 
 diag( "Testing JiftyX::CloudTags $JiftyX::CloudTags::VERSION, Perl $], $^X" );
+
+
+use JiftyX::CloudTags;
+my $cloudtags = new JiftyX::CloudTags;
+ok( $cloudtags );
