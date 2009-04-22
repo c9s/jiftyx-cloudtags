@@ -8,7 +8,7 @@ A basic test harness for the Labels model.
 
 =cut
 
-use Jifty::Test tests => 11;
+use Jifty::Test tests => 9;
 
 # Make sure we can load the model
 use_ok('TestApp::Model::Labels');
@@ -57,4 +57,8 @@ $tgen->set_tags( 'LabelsCollection' ,
     text_by => 'name',
     size_by => 'posts',
 );
-warn $tgen->render;
+my $html = $tgen->render;
+like( $html , qr{\Q<span class="cloudtags" style="font-size: 48px;">} , 'html ok' );
+like( $html , qr{\Q<br/>} , 'br ok' );
+
+

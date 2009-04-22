@@ -97,7 +97,6 @@ sub render {
         # custom column
         $url =~ s/\%\{(\w+)\}/ $c->$1 /eg;
 
-
         # my $url = 
         $output .= qq|
             <span class="cloudtags" style="font-size: ${fontsize}px;">
